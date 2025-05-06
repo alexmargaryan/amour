@@ -1,7 +1,7 @@
-import { config } from "@amour/eslint-config/service";
+import { config as baseConfig } from "@amour/eslint-config/service";
 
 export default [
-  ...config,
+  ...baseConfig,
   {
     rules: {
       // Add stricter or looser rules for this app

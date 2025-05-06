@@ -1,0 +1,5 @@
+{
+  "extends": "@amour/typescript-config/base.json",
+  "include": ["**/*.ts", "tsup.config.ts"],
+  "exclude": ["node_modules", "dist"]
+}

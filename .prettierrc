@@ -13,8 +13,7 @@
   ],
   "importOrderSeparation": true,
   "plugins": [
-    "@trivago/prettier-plugin-sort-imports",
-    "prettier-plugin-tailwindcss"
+    "@trivago/prettier-plugin-sort-imports"
   ],
   "importOrderParserPlugins": ["typescript", "decorators-legacy", "jsx"],
   "bracketSpacing": true,
