@@ -5,6 +5,7 @@ export default [
   {
     rules: {
       // Add stricter or looser rules for this app
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

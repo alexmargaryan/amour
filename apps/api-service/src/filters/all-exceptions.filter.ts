@@ -1,3 +1,5 @@
+import { ZodSerializationException } from "nestjs-zod";
+
 import {
   ExceptionFilter,
   Catch,
@@ -35,6 +37,14 @@ export class AllExceptionsFilter implements ExceptionFilter {
         level: "error",
         status: httpStatus,
         message: exception.message,
+        stack: exception.stack,
+        path: httpAdapter.getRequestUrl(ctx.getRequest()),
+      });
+    } else if (exception instanceof ZodSerializationException) {
+      const zodError = exception.getZodError();
+      this.logger.log({
+        level: "error",
+        message: zodError.message,
         stack: exception.stack,
         path: httpAdapter.getRequestUrl(ctx.getRequest()),
       });
