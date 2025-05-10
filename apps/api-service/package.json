@@ -30,6 +30,7 @@
   "devDependencies": {
     "@amour/eslint-config": "workspace:*",
     "@amour/typescript-config": "workspace:*",
+    "@amour/database": "workspace:*",
     "@nestjs/cli": "^10.0.0",
     "@nestjs/schematics": "^10.0.0",
     "@nestjs/testing": "^10.0.0",

@@ -45,6 +45,9 @@ importers:
         specifier: ^7.8.1
         version: 7.8.2
     devDependencies:
+      '@amour/database':
+        specifier: workspace:*
+        version: link:../../packages/database
       '@amour/eslint-config':
         specifier: workspace:*
         version: link:../../packages/eslint-config

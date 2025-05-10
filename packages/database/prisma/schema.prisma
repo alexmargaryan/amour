@@ -6,3 +6,133 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  VIDEO
+  AUDIO
+  GIF
+  FILE
+  CAMERA_PHOTO
+}
+
+// ─────────────────────── USERS & PROFILES ─────────────────────── //
+model User {
+  id        String    @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String    @unique
+  password  String
+  avatarUrl String?
+  role      Role      @default(USER)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  profile Profile?
+
+  sentLikes     Like[] @relation("SentLikes")
+  receivedLikes Like[] @relation("ReceivedLikes")
+
+  sentMessages Message[]         @relation("SenderMessages")
+  chatMembers  ChatMember[]
+  reactions    MessageReaction[]
+}
+
+model Profile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  bio       String?
+  birthdate DateTime
+  gender    Gender
+  country   String?
+  city      String?
+  photos    String[]
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+// ─────────────────────── SWIPING & MATCHING ─────────────────────── //
+model Like {
+  id         String   @id @default(uuid())
+  fromUserId String
+  toUserId   String
+  isMatch    Boolean  @default(false)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+
+  fromUser User @relation("SentLikes", fields: [fromUserId], references: [id])
+  toUser   User @relation("ReceivedLikes", fields: [toUserId], references: [id])
+
+  @@unique([fromUserId, toUserId])
+}
+
+// ─────────────────────── CHATS ─────────────────────── //
+model Chat {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages Message[]
+  members  ChatMember[]
+}
+
+model ChatMember {
+  id     String @id @default(uuid())
+  chatId String
+  userId String
+
+  chat Chat @relation(fields: [chatId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([chatId, userId])
+}
+
+// ─────────────────────── MESSAGES ─────────────────────── //
+model Message {
+  id               String      @id @default(uuid())
+  chatId           String
+  senderId         String
+  text             String?
+  type             MessageType @default(TEXT)
+  replyToMessageId String?
+  isDeleted        Boolean     @default(false)
+  isEdited         Boolean     @default(false)
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  chat            Chat      @relation(fields: [chatId], references: [id])
+  sender          User      @relation("SenderMessages", fields: [senderId], references: [id])
+  replyToMessage  Message?  @relation("ReplyTo", fields: [replyToMessageId], references: [id])
+  repliedMessages Message[] @relation("ReplyTo")
+
+  reactions MessageReaction[]
+
+  @@index([chatId, createdAt])
+  @@index([replyToMessageId])
+}
+
+// ─────────────────────── REACTIONS ─────────────────────── //
+model MessageReaction {
+  id        String   @id @default(uuid())
+  messageId String
+  userId    String
+  emoji     String
+  createdAt DateTime @default(now())
+
+  message Message @relation(fields: [messageId], references: [id])
+  user    User    @relation(fields: [userId], references: [id])
+
+  @@unique([messageId, userId])
+}
