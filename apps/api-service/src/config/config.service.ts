@@ -34,4 +34,48 @@ export class ApiConfigService {
       this.configService.get<string>("NODE_ENV") === Environment.Production
     );
   }
+
+  get jwtPublicKey(): string {
+    return this.configService
+      .get<string>("JWT_PUBLIC_KEY")!
+      .replaceAll("\\n", "\n");
+  }
+
+  get jwtPrivateKey(): string {
+    return this.configService
+      .get<string>("JWT_PRIVATE_KEY")!
+      .replaceAll("\\n", "\n");
+  }
+
+  get accessTokenExpiresIn(): string {
+    return this.configService.get<string>("ACCESS_TOKEN_EXPIRES_IN")!;
+  }
+
+  get refreshJwtPublicKey(): string {
+    return this.configService
+      .get<string>("REFRESH_JWT_PUBLIC_KEY")!
+      .replaceAll("\\n", "\n");
+  }
+
+  get refreshJwtPrivateKey(): string {
+    return this.configService
+      .get<string>("REFRESH_JWT_PRIVATE_KEY")!
+      .replaceAll("\\n", "\n");
+  }
+
+  get refreshTokenExpiresIn(): string {
+    return this.configService.get<string>("REFRESH_TOKEN_EXPIRES_IN")!;
+  }
+
+  get googleClientId(): string {
+    return this.configService.get<string>("GOOGLE_CLIENT_ID")!;
+  }
+
+  get googleClientSecret(): string {
+    return this.configService.get<string>("GOOGLE_CLIENT_SECRET")!;
+  }
+
+  get googleCallbackUrl(): string {
+    return this.configService.get<string>("GOOGLE_CALLBACK_URL")!;
+  }
 }
