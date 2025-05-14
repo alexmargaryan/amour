@@ -40,6 +40,7 @@ export class UsersController {
     return user;
   }
 
+  // TODO: Remove this endpoint, now when we create a user, the password stored in db without hashing
   @Post()
   @ApiCreatedResponse({ type: UserResponseDto })
   @ZodSerializerDto(UserResponseDto)
